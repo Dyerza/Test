@@ -1,913 +1,927 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>DYERZ.LTD Finance OS v3.0</title>
     <meta name="theme-color" content="#000000">
-    <meta name="description" content="Financial OS with Smart Input & Device Pairing">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5501/5501375.png">
-
-    <!-- LIBRARIES -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/auto-animate/0.7.0/auto-animate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-    <!-- QRCode Lib for Pairing Display -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-    <!-- CONFIG & THEME -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        oled: '#000000', surface: '#09090b', surface2: '#18181b', border: '#27272a',
-                        primary: '#3b82f6', accent: '#8b5cf6', success: '#10b981', danger: '#ef4444', warning: '#f59e0b', gold: '#fbbf24',
-                        textMain: '#fafafa', textMuted: '#a1a1aa',
-                    },
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], mono: ['"Share Tech Mono"', 'monospace'] },
-                    boxShadow: { 'glow': '0 0 20px -5px rgba(59, 130, 246, 0.3)', 'glow-accent': '0 0 20px -5px rgba(139, 92, 246, 0.3)' },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                        'pulse-slow': 'pulse 3s infinite',
-                    },
-                    keyframes: {
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
-                    }
-                }
-            }
-        }
-    </script>
+    <meta name="description" content="Ultimate AMOLED Productivity App">
+    <title>AmoledTask Pro</title>
+    
+    <!-- Icons (Lucide via CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* BASE STYLES */
-        body { background-color: #000000; color: #fafafa; -webkit-font-smoothing: antialiased; overflow-x: hidden; -webkit-tap-highlight-color: transparent; user-select: none; }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
-        
-        .glass-solid { background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-nav { background: rgba(9, 9, 11, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255, 255, 255, 0.08); }
-        
-        input, select, textarea { color-scheme: dark; }
-        .currency-input { font-variant-numeric: tabular-nums; }
-        
-        /* SIDEBAR ANIMATIONS (GEMINI STYLE) */
-        #sidebar { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        #sidebar .sidebar-text { opacity: 1; transition: opacity 0.2s ease, transform 0.2s ease; white-space: nowrap; }
-        
-        /* Collapsed State (Default unpinned) */
-        #sidebar.collapsed { width: 4.5rem; }
-        #sidebar.collapsed .sidebar-text { opacity: 0; pointer-events: none; transform: translateX(-10px); display: none; }
-        #sidebar.collapsed .logo-text { display: none; }
-        #sidebar.collapsed .nav-item { padding-left: 0; justify-content: center; }
-        #sidebar.collapsed .sidebar-header { padding-left: 0; justify-content: center; }
-        
-        /* Floating Hover State */
-        #sidebar.collapsed:hover { width: 18rem; position: fixed; z-index: 50; box-shadow: 0 10px 40px rgba(0,0,0,0.5); background-color: rgba(9,9,11, 0.95); }
-        #sidebar.collapsed:hover .sidebar-text { opacity: 1; pointer-events: auto; transform: translateX(0); display: block; }
-        #sidebar.collapsed:hover .logo-text { display: block; }
-        #sidebar.collapsed:hover .nav-item { justify-content: flex-start; padding-left: 0.75rem; }
-        #sidebar.collapsed:hover .sidebar-header { justify-content: flex-start; padding-left: 1.5rem; }
+        :root {
+            --bg-color: #000000;
+            --card-bg: #1C1C1E;
+            --card-active: #2C2C2E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --accent-blue: #0A84FF;
+            --accent-green: #30D158;
+            --accent-red: #FF453A;
+            --danger: #FF3B30;
+            --separator: #38383A;
+            --safe-area-top: env(safe-area-inset-top);
+            --safe-area-bottom: env(safe-area-inset-bottom);
+        }
 
-        /* Pinned State (Controlled by JS) */
-        #sidebar.pinned { width: 18rem; }
-        
-        /* MAIN WRAPPER ADJUSTMENT */
-        #main-wrapper { transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        body.sidebar-pinned #main-wrapper { padding-left: 18rem; }
-        body.sidebar-collapsed #main-wrapper { padding-left: 4.5rem; } /* Space for icon rail */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* App-like feel */
+        }
 
-        /* IPHONE HANDLE BAR */
-        .ios-handle { width: 36px; height: 5px; background-color: #3f3f46; border-radius: 100px; margin: 8px auto 16px auto; }
-        
-        /* MOBILE NAV */
-        .bottom-nav-item.active { color: #3b82f6; }
-        .bottom-nav-item.active i { transform: translateY(-2px); }
-        
-        /* ANIMATIONS */
-        @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
-        .qr-scan-line { position: absolute; width: 100%; height: 2px; background: #3b82f6; box-shadow: 0 0 10px #3b82f6; animation: scan 2s linear infinite; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            overscroll-behavior-y: none; /* Prevent pull-to-refresh */
+        }
 
-        /* ATM CARD */
-        .atm-card { aspect-ratio: 1.586; border-radius: 1.25rem; position: relative; overflow: hidden; color: white; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5); transition: transform 0.3s; transform-style: preserve-3d; }
-        .atm-card-bg { position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, #18181b 0%, #27272a 100%); }
-        .bg-bca { background: linear-gradient(135deg, #00509d 0%, #00296b 100%); }
-        .bg-mandiri { background: linear-gradient(135deg, #003554 0%, #006494 100%); }
-        .bg-bri { background: linear-gradient(135deg, #023e8a 0%, #0077b6 100%); }
-        .bg-bni { background: linear-gradient(135deg, #e85d04 0%, #f48c06 100%); }
-        
-        /* SCROLLBAR HIDE */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* --- DESKTOP BLOCKER --- */
+        #desktop-blocker {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
 
-        /* PAIRING SCREEN */
-        #auth-screen { z-index: 9999; background: #000; }
+        @media (min-width: 768px) {
+            #desktop-blocker {
+                display: flex;
+            }
+            #app-container {
+                display: none;
+            }
+        }
+
+        /* --- APP CONTAINER --- */
+        #app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: calc(80px + var(--safe-area-bottom));
+        }
+
+        /* Header */
+        header {
+            padding: calc(20px + var(--safe-area-top)) 20px 10px 20px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 0.5px solid var(--separator);
+            transition: all 0.3s ease;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .date-display {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-green) 0%, var(--card-bg) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-circle::after {
+            content: '';
+            width: 34px;
+            height: 34px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .progress-text {
+            position: absolute;
+            z-index: 2;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Sections */
+        .section-title {
+            padding: 20px 20px 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .task-list {
+            padding: 0 16px;
+            list-style: none;
+        }
+
+        /* Task Item Card */
+        .task-item {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            touch-action: pan-y; /* Allow vertical scroll, handle horizontal in JS */
+        }
+
+        .task-item:active {
+            transform: scale(0.98);
+            background-color: var(--card-active);
+        }
+
+        /* Checkbox Custom */
+        .checkbox-wrapper {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            margin-right: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .task-item.completed .checkbox-wrapper {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .task-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: calc(90px + var(--safe-area-bottom));
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(10, 132, 255, 0.4);
+            z-index: 200;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .fab:active {
+            transform: scale(0.90);
+        }
+
+        /* Modal / Sheet */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 500;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #151515;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 24px;
+            padding-bottom: calc(24px + var(--safe-area-bottom));
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 501;
+            border-top: 1px solid #333;
+        }
+
+        .bottom-sheet.active {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: #444;
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        /* Form Elements */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"], input[type="date"], textarea {
+            width: 100%;
+            background: #252525;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        input[type="date"] {
+            color-scheme: dark;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-blue);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn-secondary {
+            background: #333;
+            margin-top: 10px;
+        }
+        
+        .btn-danger {
+            background: rgba(255, 59, 48, 0.15);
+            color: var(--danger);
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        /* Toggle Switch for Batch Mode */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 30px;
+            background: #333;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+        
+        .toggle-switch.active {
+            background: var(--accent-green);
+        }
+        
+        .toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(20px);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: calc(60px + var(--safe-area-bottom));
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(20px);
+            border-top: 0.5px solid #222;
+            display: flex;
+            justify-content: space-around;
+            padding-top: 10px;
+            z-index: 400;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #555;
+            font-size: 10px;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--accent-blue);
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-item {
+            animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Notifications toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(30,30,30, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #333;
+            width: 90%;
+            max-width: 350px;
+        }
+        
+        .toast.show {
+            transform: translateX(-50%) translateY(var(--safe-area-top));
+        }
+
     </style>
 </head>
-<body class="overflow-x-hidden antialiased selection:bg-primary/30 selection:text-white sidebar-collapsed">
+<body>
 
-    <!-- AUTH / PAIRING SCREEN (WHATSAPP STYLE) -->
-    <div id="auth-screen" class="fixed inset-0 flex flex-col md:flex-row items-center justify-center p-6 transition-all duration-500">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50"></div>
-        
-        <!-- Left Side: Intro -->
-        <div class="z-10 text-center md:text-left md:mr-12 md:max-w-md mb-10 md:mb-0">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent shadow-glow mb-6">
-                <i class="fa-solid fa-infinity text-3xl text-white"></i>
-            </div>
-            <h1 class="text-4xl font-bold text-white mb-2 tracking-tight">DYERZ<span class="text-primary">.LTD</span></h1>
-            <p class="text-xl text-textMuted mb-6 font-light">Finance OS v3.0</p>
-            <div class="space-y-4">
-                <div class="flex items-center gap-4 text-sm text-textMuted">
-                    <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-primary"><i class="fa-solid fa-sync"></i></span>
-                    <span>Real-time Sync antar Tab & Perangkat</span>
-                </div>
-                <div class="flex items-center gap-4 text-sm text-textMuted">
-                    <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-success"><i class="fa-solid fa-shield-halved"></i></span>
-                    <span>End-to-End Local Encrypted</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right Side: Action Card -->
-        <div class="z-10 bg-surface2 border border-border p-8 rounded-3xl shadow-2xl w-full max-w-sm relative overflow-hidden group">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary animate-pulse"></div>
-            
-            <!-- Tab Switcher -->
-            <div class="flex p-1 bg-black/50 rounded-xl mb-6">
-                <button onclick="authSys.switchTab('login')" id="tab-login" class="flex-1 py-2 text-xs font-bold rounded-lg bg-surface text-white shadow-lg transition-all">Login / Pair</button>
-                <button onclick="authSys.switchTab('register')" id="tab-register" class="flex-1 py-2 text-xs font-bold rounded-lg text-textMuted hover:text-white transition-all">Baru</button>
-            </div>
-
-            <!-- Login View -->
-            <div id="view-auth-login" class="space-y-5">
-                <div class="text-center">
-                    <h3 class="text-white font-bold mb-1">Pairing Perangkat</h3>
-                    <p class="text-[10px] text-textMuted">Masukkan Kode Pairing dari perangkat utama Anda.</p>
-                </div>
-                <div class="relative">
-                    <textarea id="login-code" rows="3" placeholder="Tempel Kode Pairing disini..." class="w-full bg-black border border-border rounded-xl p-3 text-xs text-white font-mono focus:border-primary focus:outline-none resize-none"></textarea>
-                    <button onclick="authSys.pasteCode()" class="absolute right-2 bottom-2 text-[10px] bg-white/10 px-2 py-1 rounded text-textMuted hover:text-white"><i class="fa-regular fa-clipboard"></i></button>
-                </div>
-                <button onclick="authSys.login()" class="w-full py-3 bg-primary hover:bg-blue-600 text-white rounded-xl font-bold shadow-glow transition-all active:scale-95">Masuk & Sinkronisasi</button>
-            </div>
-
-            <!-- Register View -->
-            <div id="view-auth-register" class="hidden space-y-5">
-                <div class="text-center">
-                    <h3 class="text-white font-bold mb-1">Buat Sesi Baru</h3>
-                    <p class="text-[10px] text-textMuted">Data akan tersimpan lokal di perangkat ini.</p>
-                </div>
-                <div class="p-6 bg-white/5 rounded-2xl border border-white/5 flex flex-col items-center justify-center gap-3">
-                    <i class="fa-solid fa-mobile-screen-button text-3xl text-textMuted"></i>
-                    <span class="text-xs text-center text-textMuted">Perangkat ini akan menjadi<br><strong class="text-white">HOST UTAMA</strong></span>
-                </div>
-                <button onclick="authSys.register()" class="w-full py-3 bg-white text-black rounded-xl font-bold shadow-lg transition-all active:scale-95 hover:bg-gray-200">Mulai Sesi Baru</button>
-            </div>
-        </div>
-        
-        <p class="absolute bottom-6 text-[10px] text-textMuted font-mono">SECURE CONNECTION ESTABLISHED</p>
+    <!-- Desktop Blocker -->
+    <div id="desktop-blocker">
+        <i data-lucide="smartphone" style="width: 64px; height: 64px; color: #333; margin-bottom: 20px;"></i>
+        <h2 style="color: white; margin-bottom: 10px;">Mobile Experience Only</h2>
+        <p style="color: #666; font-size: 14px; max-width: 300px; line-height: 1.5;">
+            Website ini dirancang khusus untuk perangkat mobile dengan presisi 120Hz dan desain AMOLED. Silakan buka di Smartphone Anda.
+        </p>
     </div>
 
-    <!-- BACKGROUND -->
-    <div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-black to-black pointer-events-none"></div>
-
-    <!-- SIDEBAR (DESKTOP GEMINI STYLE) -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 bg-surface/95 backdrop-blur-xl border-r border-border hidden lg:flex flex-col h-full shadow-2xl overflow-hidden group/sidebar collapsed">
-        <!-- Header -->
-        <div class="h-20 flex items-center px-4 sidebar-header border-b border-white/5 shrink-0 transition-all">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-glow">
-                <i class="fa-solid fa-infinity text-white"></i>
-            </div>
-            <div class="ml-3 logo-text overflow-hidden">
-                <h1 class="text-lg font-bold tracking-tight text-white">DYERZ<span class="text-primary">.LTD</span></h1>
-                <p class="text-[9px] text-textMuted uppercase tracking-widest">Finance OS</p>
-            </div>
-            <!-- Pin Button -->
-            <button onclick="sidebarSys.togglePin()" class="ml-auto w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-textMuted hover:text-white transition-all sidebar-text" title="Pin Sidebar">
-                <i id="pin-icon" class="fa-solid fa-thumbtack text-xs transform rotate-45"></i>
-            </button>
-        </div>
-
-        <!-- Menu -->
-        <div class="flex-1 overflow-y-auto py-6 px-2 space-y-1 no-scrollbar">
-            <button onclick="router.navigate('dashboard')" class="nav-item w-full flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all text-textMuted hover:bg-white/5 hover:text-white group relative" data-page="dashboard">
-                <div class="w-9 h-9 flex items-center justify-center shrink-0"><i class="fa-solid fa-grid-2 text-lg group-hover:text-primary transition-colors"></i></div>
-                <span class="sidebar-text ml-2">Dashboard</span>
-            </button>
-            <button onclick="router.navigate('wallet')" class="nav-item w-full flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all text-textMuted hover:bg-white/5 hover:text-white group relative" data-page="wallet">
-                <div class="w-9 h-9 flex items-center justify-center shrink-0"><i class="fa-solid fa-wallet text-lg group-hover:text-gold transition-colors"></i></div>
-                <span class="sidebar-text ml-2">Wallet & ATM</span>
-            </button>
-            <button onclick="router.navigate('transactions')" class="nav-item w-full flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all text-textMuted hover:bg-white/5 hover:text-white group relative" data-page="transactions">
-                <div class="w-9 h-9 flex items-center justify-center shrink-0"><i class="fa-solid fa-arrow-right-arrow-left text-lg group-hover:text-success transition-colors"></i></div>
-                <span class="sidebar-text ml-2">Transaksi</span>
-            </button>
-            <div class="my-4 h-px bg-white/5 mx-4"></div>
-            <button onclick="router.navigate('budget')" class="nav-item w-full flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all text-textMuted hover:bg-white/5 hover:text-white group relative" data-page="budget">
-                <div class="w-9 h-9 flex items-center justify-center shrink-0"><i class="fa-solid fa-chart-pie text-lg group-hover:text-warning transition-colors"></i></div>
-                <span class="sidebar-text ml-2">Budgeting</span>
-            </button>
-            <button onclick="router.navigate('settings')" class="nav-item w-full flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all text-textMuted hover:bg-white/5 hover:text-white group relative" data-page="settings">
-                <div class="w-9 h-9 flex items-center justify-center shrink-0"><i class="fa-solid fa-sliders text-lg group-hover:text-accent transition-colors"></i></div>
-                <span class="sidebar-text ml-2">Pengaturan</span>
-            </button>
-        </div>
-
-        <!-- Profile Footer -->
-        <div class="p-3 border-t border-white/5 mt-auto">
-            <button onclick="router.navigate('settings')" class="w-full flex items-center p-2 rounded-xl hover:bg-white/5 transition-all group">
-                <div id="sidebar-avatar" class="w-9 h-9 rounded-lg bg-surface2 border border-border flex items-center justify-center text-xs font-bold text-white shrink-0 overflow-hidden">
-                    <span>U</span>
+    <!-- Main App -->
+    <div id="app-container">
+        <header>
+            <div class="header-top">
+                <div>
+                    <div class="date-display" id="currentDate">KAMIS, 11 DES</div>
+                    <h1 id="greeting">Selamat Siang</h1>
                 </div>
-                <div class="ml-3 text-left overflow-hidden sidebar-text">
-                    <p id="sidebar-name" class="text-sm font-bold text-white truncate group-hover:text-primary transition-colors">User</p>
-                    <p id="sidebar-role" class="text-[10px] text-textMuted truncate">Free Plan</p>
-                </div>
-            </button>
-        </div>
-    </aside>
-
-    <!-- MOBILE NAV -->
-    <nav class="lg:hidden fixed bottom-0 left-0 w-full glass-nav z-40 pb-safe border-t border-white/5">
-        <div class="grid grid-cols-5 h-16 items-center px-2">
-            <button onclick="router.navigate('dashboard')" class="bottom-nav-item flex flex-col items-center gap-1 active" data-page="dashboard"><i class="fa-solid fa-grid-2 text-xl"></i></button>
-            <button onclick="router.navigate('wallet')" class="bottom-nav-item flex flex-col items-center gap-1 text-textMuted" data-page="wallet"><i class="fa-solid fa-wallet text-xl"></i></button>
-            <button onclick="ui.openModal('modal-add-trx')" class="flex flex-col items-center justify-center -mt-8">
-                <div class="w-14 h-14 rounded-full bg-primary text-white shadow-glow flex items-center justify-center active:scale-90 transition-transform"><i class="fa-solid fa-plus text-xl"></i></div>
-            </button>
-            <button onclick="router.navigate('transactions')" class="bottom-nav-item flex flex-col items-center gap-1 text-textMuted" data-page="transactions"><i class="fa-solid fa-arrow-right-arrow-left text-xl"></i></button>
-            <button onclick="ui.openModal('modal-menu')" class="bottom-nav-item flex flex-col items-center gap-1 text-textMuted"><i class="fa-solid fa-bars text-xl"></i></button>
-        </div>
-    </nav>
-
-    <!-- MAIN CONTENT -->
-    <div id="main-wrapper" class="flex flex-col min-h-screen pb-24 lg:pb-0">
-        <!-- Header -->
-        <header class="sticky top-0 z-30 h-16 bg-surface/80 backdrop-blur-md border-b border-border flex items-center justify-between px-4 lg:px-8">
-            <div class="flex items-center gap-3">
-                <div class="lg:hidden w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center"><i class="fa-solid fa-infinity text-white text-xs"></i></div>
-                <div><h2 id="page-title" class="text-base font-bold text-white">Dashboard</h2><p class="text-[10px] text-textMuted hidden lg:block" id="current-date">...</p></div>
-            </div>
-            <div class="flex items-center gap-4">
-                <button onclick="handlers.syncNow()" class="w-8 h-8 rounded-full bg-surface2 border border-border flex items-center justify-center text-textMuted hover:text-success transition-all" title="Sync Status">
-                    <i id="sync-icon" class="fa-solid fa-cloud-check text-xs"></i>
-                </button>
-                <div class="w-8 h-8 rounded-full bg-surface2 border border-border overflow-hidden cursor-pointer" onclick="router.navigate('settings')">
-                     <div id="header-avatar" class="w-full h-full flex items-center justify-center text-xs font-bold">U</div>
+                <div class="progress-circle" id="progressRing">
+                    <span class="progress-text" id="progressText">0%</span>
                 </div>
             </div>
         </header>
 
-        <!-- Views -->
-        <main class="p-4 lg:p-8 max-w-7xl mx-auto w-full">
+        <!-- Tab Content: Active Tasks -->
+        <div id="active-view">
+            <div class="section-title" id="today-header">Hari Ini</div>
+            <ul class="task-list" id="list-today"></ul>
+
+            <div class="section-title">Besok</div>
+            <ul class="task-list" id="list-tomorrow"></ul>
+
+            <div class="section-title">Mendatang</div>
+            <ul class="task-list" id="list-upcoming"></ul>
+        </div>
+
+        <!-- Tab Content: History -->
+        <div id="history-view" style="display: none;">
+            <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+                Riwayat Selesai
+                <span style="font-size: 12px; color: #555; background: #111; padding: 4px 8px; border-radius: 6px;" id="history-count">0 Tugas</span>
+            </div>
+            <ul class="task-list" id="list-history"></ul>
             
-            <!-- DASHBOARD VIEW -->
-            <div id="view-dashboard" class="page-view space-y-6 animate-slide-up">
-                <!-- Balance Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="glass-solid p-6 rounded-3xl relative overflow-hidden group">
-                        <div class="absolute -right-6 -top-6 w-32 h-32 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-colors"></div>
-                        <div class="relative z-10">
-                            <p class="text-xs text-textMuted uppercase font-bold tracking-wider mb-2">Total Kekayaan</p>
-                            <h2 class="text-3xl font-bold text-white mb-1 tracking-tight" id="dash-networth">Rp 0</h2>
-                            <p class="text-[10px] text-success flex items-center gap-1"><i class="fa-solid fa-arrow-trend-up"></i> <span id="dash-growth">0%</span> bulan ini</p>
-                        </div>
-                    </div>
-                    <div class="glass-solid p-6 rounded-3xl flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-textMuted uppercase font-bold tracking-wider mb-1">Pemasukan</p>
-                            <h3 class="text-xl font-bold text-white" id="dash-income">Rp 0</h3>
-                        </div>
-                        <div class="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success"><i class="fa-solid fa-arrow-down"></i></div>
-                    </div>
-                    <div class="glass-solid p-6 rounded-3xl flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-textMuted uppercase font-bold tracking-wider mb-1">Pengeluaran</p>
-                            <h3 class="text-xl font-bold text-white" id="dash-expense">Rp 0</h3>
-                        </div>
-                        <div class="w-10 h-10 rounded-full bg-danger/10 flex items-center justify-center text-danger"><i class="fa-solid fa-arrow-up"></i></div>
-                    </div>
-                </div>
-
-                <!-- Chart & Recent -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 glass-solid rounded-3xl p-6 border border-border">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold text-white">Arus Kas</h3>
-                            <select class="bg-surface2 border border-border rounded-lg text-xs px-2 py-1 text-textMuted outline-none"><option>7 Hari Terakhir</option></select>
-                        </div>
-                        <div class="h-64 w-full"><canvas id="mainChart"></canvas></div>
-                    </div>
-                    <div class="glass-solid rounded-3xl p-6 border border-border flex flex-col">
-                        <h3 class="font-bold text-white mb-4">Transaksi Terakhir</h3>
-                        <div id="recent-list" class="flex-1 space-y-3 overflow-y-auto max-h-[300px] no-scrollbar"></div>
-                        <button onclick="router.navigate('transactions')" class="mt-4 w-full py-2 rounded-xl bg-surface2 text-xs font-bold text-textMuted hover:text-white transition-colors">Lihat Semua</button>
-                    </div>
-                </div>
+            <div style="padding: 20px;">
+                <button class="btn-danger" onclick="app.deleteAllHistory()">Hapus Semua Riwayat</button>
             </div>
+        </div>
 
-            <!-- WALLET VIEW -->
-            <div id="view-wallet" class="page-view hidden space-y-6 animate-slide-up">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-xl font-bold text-white">Kartu Saya</h3>
-                    <button onclick="ui.openModal('modal-add-card')" class="px-4 py-2 bg-white text-black rounded-xl text-xs font-bold hover:scale-105 transition-transform">Tambah Kartu</button>
-                </div>
-                <div id="card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </div>
+        <div style="height: 100px;"></div> <!-- Spacer -->
+    </div>
 
-            <!-- TRANSACTIONS VIEW -->
-            <div id="view-transactions" class="page-view hidden space-y-6 animate-slide-up">
-                <div class="glass-solid rounded-3xl overflow-hidden border border-border">
-                    <div class="p-4 border-b border-border flex gap-2 overflow-x-auto no-scrollbar">
-                        <button onclick="filters.set('all')" class="filter-btn active px-4 py-2 rounded-lg text-xs font-bold bg-primary text-white">Semua</button>
-                        <button onclick="filters.set('income')" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold text-textMuted hover:bg-surface2">Pemasukan</button>
-                        <button onclick="filters.set('expense')" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold text-textMuted hover:bg-surface2">Pengeluaran</button>
-                    </div>
-                    <div id="trx-list" class="divide-y divide-border/50"></div>
-                </div>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i data-lucide="bell-ring" color="#0A84FF"></i>
+        <div>
+            <h4 style="font-size: 14px; margin-bottom: 2px;">Pengingat</h4>
+            <p style="font-size: 12px; color: #aaa;" id="toast-msg">Tugas ditambahkan</p>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="app.openModal()">
+        <i data-lucide="plus" width="28"></i>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="app.closeModal()"></div>
+    <div class="bottom-sheet" id="addTaskSheet">
+        <div class="sheet-handle"></div>
+        <h3 style="margin-bottom: 20px; font-size: 20px;">Tambah Tugas</h3>
+
+        <div class="toggle-container" onclick="app.toggleBatchMode()">
+            <span style="color: #aaa; font-size: 14px;">Mode Kelompok (Batch)</span>
+            <div class="toggle-switch" id="batchToggle">
+                <div class="toggle-knob"></div>
             </div>
+        </div>
+
+        <!-- Single Input Mode -->
+        <div id="singleInputMode">
+            <div class="input-group">
+                <label>Judul Tugas</label>
+                <input type="text" id="taskInput" placeholder="Misal: Meeting jam 2 siang...">
+            </div>
+        </div>
+
+        <!-- Batch Input Mode -->
+        <div id="batchInputMode" style="display: none;">
+            <div class="input-group">
+                <label>Daftar Tugas (Satu per baris)</label>
+                <textarea id="batchInput" placeholder="Beli Susu&#10;Cuci Mobil&#10;Email Bos"></textarea>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Jatuh Tempo</label>
+            <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+                <button onclick="app.setDateQuick('today')" class="btn-primary" style="margin:0; width: auto; background: #333; font-size: 12px; padding: 10px 16px;">Hari Ini</button>
+                <button onclick="app.setDateQuick('tomorrow')" class="btn-primary" style="margin:0; width: auto; background: #333; font-size: 12px; padding: 10px 16px;">Besok</button>
+                <input type="date" id="dateInput" style="width: auto; flex: 1; padding: 10px;">
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="app.saveTask()">Simpan Tugas</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="app.switchTab('tasks', this)">
+            <i data-lucide="check-circle-2" width="24"></i>
+            <span>Tugas</span>
+        </div>
+        <div class="nav-item" onclick="app.switchTab('history', this)">
+            <i data-lucide="clock" width="24"></i>
+            <span>Riwayat</span>
+        </div>
+    </div>
+
+<script>
+    // --- APP LOGIC ---
+    class TaskApp {
+        constructor() {
+            this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            this.isBatchMode = false;
+            this.init();
+        }
+
+        init() {
+            lucide.createIcons();
+            this.updateDateDisplay();
+            this.renderTasks();
+            this.requestNotificationPermission();
+            this.checkReminders();
             
-            <!-- BUDGET VIEW -->
-            <div id="view-budget" class="page-view hidden space-y-6 animate-slide-up">
-                <div class="max-w-xl mx-auto glass-solid p-8 rounded-3xl border border-border text-center">
-                    <div class="w-16 h-16 rounded-full bg-warning/10 text-warning flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-scale-balanced"></i></div>
-                    <h3 class="text-xl font-bold text-white mb-2">Kontrol Budget</h3>
-                    <p class="text-textMuted text-xs mb-8">Atur batas pengeluaran bulanan Anda.</p>
-                    
-                    <div class="mb-8">
-                        <label class="text-[10px] font-bold text-textMuted uppercase mb-2 block">Batas Maksimal (IDR)</label>
-                        <input type="text" id="budget-input" class="w-full bg-black border border-border rounded-xl px-4 py-3 text-center text-xl font-bold text-white focus:border-warning outline-none currency-input" placeholder="0">
-                    </div>
-                    
-                    <div class="bg-surface2 rounded-2xl p-4 border border-border mb-6">
-                        <div class="flex justify-between text-xs mb-2"><span class="text-textMuted">Terpakai</span><span class="text-white font-bold" id="budget-spent">Rp 0</span></div>
-                        <div class="w-full h-3 bg-black rounded-full overflow-hidden border border-white/5 relative">
-                            <div id="budget-bar" class="h-full bg-warning transition-all duration-500 w-0"></div>
-                        </div>
-                        <p id="budget-alert" class="text-[10px] text-danger mt-2 font-bold hidden animate-pulse">PERINGATAN: MELEBIHI BATAS!</p>
-                    </div>
-                    
-                    <button onclick="handlers.saveBudget()" class="w-full py-3 bg-white text-black rounded-xl font-bold hover:bg-gray-200 transition-colors">Simpan Pengaturan</button>
-                </div>
-            </div>
+            // Interval for live date updates
+            setInterval(() => this.checkReminders(), 60000); // Check every minute
+        }
 
-            <!-- SETTINGS VIEW (PAIRING) -->
-            <div id="view-settings" class="page-view hidden space-y-6 animate-slide-up">
-                <div class="max-w-2xl mx-auto space-y-6">
-                    <!-- Profile Card -->
-                    <div class="glass-solid p-6 rounded-3xl border border-border flex items-center gap-4">
-                        <div id="settings-avatar" class="w-16 h-16 rounded-2xl bg-surface2 border border-border flex items-center justify-center text-2xl font-bold text-white overflow-hidden relative group cursor-pointer">
-                            <span>U</span>
-                            <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handlers.updatePhoto(this)">
-                        </div>
-                        <div>
-                            <input type="text" id="settings-name" class="bg-transparent text-xl font-bold text-white focus:outline-none border-b border-transparent focus:border-primary" value="User">
-                            <p class="text-xs text-textMuted mt-1">Ketuk foto untuk ubah</p>
-                        </div>
-                        <button onclick="handlers.saveProfile()" class="ml-auto px-4 py-2 bg-primary/10 text-primary rounded-lg text-xs font-bold hover:bg-primary hover:text-white transition-colors">Simpan</button>
-                    </div>
+        requestNotificationPermission() {
+            if ("Notification" in window) {
+                Notification.requestPermission();
+            }
+        }
 
-                    <!-- Pairing Section -->
-                    <div class="glass-solid p-6 rounded-3xl border border-border">
-                        <h3 class="font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-qrcode text-primary"></i> Pairing Perangkat</h3>
-                        <p class="text-xs text-textMuted mb-6">Hubungkan perangkat lain dengan memindai kode ini atau menyalin kode pairing manual.</p>
-                        
-                        <div class="flex flex-col md:flex-row gap-8 items-center">
-                            <div class="p-3 bg-white rounded-xl shadow-glow">
-                                <div id="qrcode" class="w-32 h-32"></div>
-                            </div>
-                            <div class="flex-1 w-full space-y-3">
-                                <div class="relative">
-                                    <label class="text-[10px] font-bold text-textMuted uppercase block mb-1">KODE PAIRING MANUAL</label>
-                                    <input type="text" id="pairing-code-display" readonly class="w-full bg-black border border-border rounded-lg px-3 py-2 text-xs text-textMuted font-mono truncate cursor-pointer hover:text-white hover:border-white/20 transition-colors" onclick="this.select(); document.execCommand('copy'); ui.toast('Kode disalin!')" value="Generating...">
-                                    <button onclick="handlers.copyPairingCode()" class="absolute right-2 top-6 text-primary text-xs font-bold">SALIN</button>
-                                </div>
-                                <div class="p-3 rounded-lg bg-surface2 border border-border text-[10px] text-textMuted leading-relaxed">
-                                    <strong class="text-white">Cara Kerja:</strong> Salin kode diatas dan tempelkan pada menu Login di perangkat baru (Desktop/HP) untuk menyinkronkan seluruh data secara instan.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        updateDateDisplay() {
+            const now = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'short' };
+            document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', options);
+            
+            const hours = now.getHours();
+            let greeting = "Selamat Pagi";
+            if (hours >= 12 && hours < 15) greeting = "Selamat Siang";
+            else if (hours >= 15 && hours < 18) greeting = "Selamat Sore";
+            else if (hours >= 18) greeting = "Selamat Malam";
+            
+            document.getElementById('greeting').innerText = greeting;
+            
+            // Set default date picker to today
+            document.getElementById('dateInput').valueAsDate = new Date();
+        }
 
-                    <!-- Danger Zone -->
-                    <button onclick="handlers.logout()" class="w-full p-4 rounded-2xl border border-danger/20 text-danger hover:bg-danger/10 transition-colors font-bold text-sm">Keluar & Hapus Sesi Lokal</button>
-                </div>
-            </div>
+        saveToStorage() {
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
+            this.renderTasks();
+        }
 
-        </main>
-    </div>
+        vibrate() {
+            if (navigator.vibrate) navigator.vibrate(10);
+        }
 
-    <!-- MODAL: ADD TRANSACTION -->
-    <div id="modal-add-trx" class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="ui.closeModal('modal-add-trx')"></div>
-        <div class="bg-surface2 border border-border w-full max-w-md p-6 rounded-t-[2rem] sm:rounded-[2rem] relative transform translate-y-full sm:translate-y-10 sm:scale-95 transition-all duration-300 shadow-2xl">
-            <div class="ios-handle sm:hidden"></div> <!-- iPhone Handle -->
-            <h3 class="text-lg font-bold text-white mb-6">Transaksi Baru</h3>
-            <form onsubmit="handlers.addTrx(event)" class="space-y-4">
-                <div class="flex p-1 bg-black rounded-xl">
-                    <label class="flex-1 cursor-pointer"><input type="radio" name="type" value="expense" checked class="peer sr-only"><div class="text-center py-2 rounded-lg text-xs font-bold text-textMuted peer-checked:bg-danger peer-checked:text-white transition-all">Pengeluaran</div></label>
-                    <label class="flex-1 cursor-pointer"><input type="radio" name="type" value="income" class="peer sr-only"><div class="text-center py-2 rounded-lg text-xs font-bold text-textMuted peer-checked:bg-success peer-checked:text-white transition-all">Pemasukan</div></label>
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-textMuted uppercase ml-1">Jumlah</label>
-                    <input type="text" name="amount" required class="currency-input w-full bg-surface border border-border rounded-xl px-4 py-3 text-xl font-bold text-white focus:border-primary outline-none" placeholder="Rp 0">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-textMuted uppercase ml-1">Keterangan</label>
-                    <input type="text" name="desc" required class="w-full bg-surface border border-border rounded-xl px-4 py-3 text-sm text-white focus:border-primary outline-none" placeholder="Makan Siang, Gaji, dll">
-                </div>
-                <button type="submit" class="w-full py-3 bg-primary text-white rounded-xl font-bold shadow-glow mt-2">Simpan</button>
-            </form>
-        </div>
-    </div>
+        // --- CRUD OPERATIONS ---
 
-    <!-- MODAL: MOBILE MENU (IPHONE STYLE) -->
-    <div id="modal-menu" class="fixed inset-0 z-[60] flex items-end justify-center opacity-0 pointer-events-none transition-all duration-300">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="ui.closeModal('modal-menu')"></div>
-        <div class="bg-surface2 border-t border-border w-full p-4 rounded-t-[2rem] relative transform translate-y-full transition-all duration-300 shadow-2xl pb-safe">
-            <div class="ios-handle"></div> <!-- iPhone Handle -->
-            <div class="grid grid-cols-4 gap-4 pt-2 pb-6">
-                <button onclick="router.navigate('budget'); ui.closeModal('modal-menu')" class="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-white/5"><div class="w-12 h-12 rounded-full bg-warning/10 text-warning flex items-center justify-center text-xl"><i class="fa-solid fa-chart-pie"></i></div><span class="text-[10px] font-medium text-textMuted">Budget</span></button>
-                <button onclick="router.navigate('settings'); ui.closeModal('modal-menu')" class="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-white/5"><div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl"><i class="fa-solid fa-sliders"></i></div><span class="text-[10px] font-medium text-textMuted">Setting</span></button>
-                <button onclick="router.navigate('wallet'); ui.closeModal('modal-menu')" class="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-white/5"><div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center text-xl"><i class="fa-solid fa-credit-card"></i></div><span class="text-[10px] font-medium text-textMuted">Kartu</span></button>
-                <button onclick="handlers.logout()" class="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-white/5"><div class="w-12 h-12 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center text-xl"><i class="fa-solid fa-power-off"></i></div><span class="text-[10px] font-medium text-textMuted">Keluar</span></button>
-            </div>
-        </div>
-    </div>
+        saveTask() {
+            this.vibrate();
+            const dateVal = document.getElementById('dateInput').value;
+            const dueDate = dateVal ? dateVal : new Date().toISOString().split('T')[0];
 
-    <!-- MODAL: ADD CARD -->
-    <div id="modal-add-card" class="fixed inset-0 z-[60] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="ui.closeModal('modal-add-card')"></div>
-        <div class="bg-surface2 border border-border w-full max-w-md p-6 rounded-[2rem] relative transform scale-95 transition-all duration-300 mx-4">
-            <h3 class="text-lg font-bold text-white mb-4">Tambah Kartu</h3>
-            <form onsubmit="handlers.addCard(event)" class="space-y-4">
-                <select name="bank" class="w-full bg-surface border border-border rounded-xl px-4 py-3 text-white text-sm"><option value="bca">BCA</option><option value="mandiri">Mandiri</option><option value="bri">BRI</option><option value="bni">BNI</option></select>
-                <input type="text" name="holder" placeholder="NAMA PEMILIK" required class="w-full bg-surface border border-border rounded-xl px-4 py-3 text-white text-sm uppercase">
-                <input type="text" name="number" placeholder="0000 0000 0000 0000" maxlength="19" required class="w-full bg-surface border border-border rounded-xl px-4 py-3 text-white text-sm font-mono">
-                <input type="text" name="balance" placeholder="Saldo Awal: Rp 0" required class="currency-input w-full bg-surface border border-border rounded-xl px-4 py-3 text-white text-sm">
-                <button type="submit" class="w-full py-3 bg-white text-black rounded-xl font-bold">Simpan Kartu</button>
-            </form>
-        </div>
-    </div>
+            if (this.isBatchMode) {
+                const raw = document.getElementById('batchInput').value;
+                if (!raw.trim()) return;
+                const lines = raw.split('\n');
+                lines.forEach(line => {
+                    if (line.trim()) {
+                        this.addTaskInternal(line.trim(), dueDate);
+                    }
+                });
+            } else {
+                const title = document.getElementById('taskInput').value;
+                if (!title.trim()) return;
+                this.addTaskInternal(title, dueDate);
+            }
 
-    <!-- TOAST CONTAINER -->
-    <div id="toast-container" class="fixed top-4 right-4 z-[100] space-y-2 pointer-events-none"></div>
+            this.closeModal();
+            this.showToast('Tugas berhasil disimpan');
+            
+            // Schedule notification simulation
+            setTimeout(() => {
+                this.scheduleNotification(this.tasks[this.tasks.length - 1]);
+            }, 1000);
+        }
 
-    <script>
-        const DB_KEY = 'dyerz_os_v3_data';
-        
-        // --- CORE DATA & STATE ---
-        let db = {
-            profile: { name: 'User', photo: null },
-            transactions: [],
-            cards: [],
-            budget: 0,
-            settings: { pinnedSidebar: false }
-        };
+        addTaskInternal(title, date) {
+            const task = {
+                id: Date.now() + Math.random(),
+                title: title,
+                date: date,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            this.tasks.push(task);
+            this.saveToStorage();
+        }
 
-        const utils = {
-            formatIDR: (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n),
-            parseIDR: (s) => parseFloat(s.toString().replace(/[^0-9]/g, '')) || 0,
-            genId: () => Date.now().toString(36) + Math.random().toString(36).substr(2),
-            save: () => {
-                localStorage.setItem(DB_KEY, JSON.stringify(db));
-                // Trigger pairing sync for other tabs
-                handlers.generatePairingCode(); 
-            },
-            load: () => {
-                const data = localStorage.getItem(DB_KEY);
-                if (data) db = JSON.parse(data);
-            },
-            dateStr: (d) => new Date(d).toLocaleDateString('id-ID', {day: 'numeric', month:'short'})
-        };
+        toggleComplete(id) {
+            this.vibrate();
+            const task = this.tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                this.saveToStorage();
+                if(task.completed) this.showToast('Tugas selesai!');
+            }
+        }
 
-        // --- AUTH & PAIRING SYSTEM (WhatsApp Style) ---
-        const authSys = {
-            init: () => {
-                const hasData = localStorage.getItem(DB_KEY);
-                if (hasData) {
-                    document.getElementById('auth-screen').classList.add('opacity-0', 'pointer-events-none');
-                    utils.load();
-                    app.init();
+        deleteTask(id) {
+            this.vibrate();
+            this.tasks = this.tasks.filter(t => t.id !== id);
+            this.saveToStorage();
+        }
+
+        deleteAllHistory() {
+            if(confirm("Hapus semua tugas yang sudah selesai?")) {
+                this.tasks = this.tasks.filter(t => !t.completed);
+                this.saveToStorage();
+                this.showToast('Riwayat dibersihkan');
+            }
+        }
+
+        // --- RENDERING ---
+
+        renderTasks() {
+            const listToday = document.getElementById('list-today');
+            const listTomorrow = document.getElementById('list-tomorrow');
+            const listUpcoming = document.getElementById('list-upcoming');
+            const listHistory = document.getElementById('list-history');
+            
+            // Clear lists
+            listToday.innerHTML = '';
+            listTomorrow.innerHTML = '';
+            listUpcoming.innerHTML = '';
+            listHistory.innerHTML = '';
+
+            const today = new Date().toISOString().split('T')[0];
+            const tomorrowDate = new Date();
+            tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+            const tomorrow = tomorrowDate.toISOString().split('T')[0];
+
+            let activeCount = 0;
+            let completedTodayCount = 0;
+            let totalTodayTask = 0;
+
+            // Sort by date then created time
+            const sortedTasks = [...this.tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            sortedTasks.forEach(task => {
+                const el = this.createTaskElement(task);
+                
+                if (task.completed) {
+                    listHistory.prepend(el);
+                    // Hitung progress hanya untuk tugas hari ini yang selesai
+                    if (task.date === today) {
+                        completedTodayCount++;
+                        totalTodayTask++;
+                    }
                 } else {
-                    document.getElementById('auth-screen').classList.remove('opacity-0', 'pointer-events-none');
-                }
-            },
-            switchTab: (tab) => {
-                const loginView = document.getElementById('view-auth-login');
-                const regView = document.getElementById('view-auth-register');
-                const tLogin = document.getElementById('tab-login');
-                const tReg = document.getElementById('tab-register');
-                
-                if (tab === 'login') {
-                    loginView.classList.remove('hidden'); regView.classList.add('hidden');
-                    tLogin.classList.replace('text-textMuted','text-white'); tLogin.classList.add('bg-surface');
-                    tReg.classList.replace('text-white','text-textMuted'); tReg.classList.remove('bg-surface');
-                } else {
-                    loginView.classList.add('hidden'); regView.classList.remove('hidden');
-                    tReg.classList.replace('text-textMuted','text-white'); tReg.classList.add('bg-surface');
-                    tLogin.classList.replace('text-white','text-textMuted'); tLogin.classList.remove('bg-surface');
-                }
-            },
-            register: () => {
-                db = { profile: { name: 'User Baru', photo: null }, transactions: [], cards: [], budget: 0, settings: { pinnedSidebar: false } };
-                utils.save();
-                ui.toast("Sesi Baru Dibuat");
-                setTimeout(() => location.reload(), 1000);
-            },
-            login: () => {
-                const code = document.getElementById('login-code').value;
-                try {
-                    const decoded = atob(code);
-                    const parsed = JSON.parse(decoded);
-                    if (parsed.profile && parsed.transactions) {
-                        localStorage.setItem(DB_KEY, JSON.stringify(parsed));
-                        ui.toast("Pairing Berhasil!");
-                        setTimeout(() => location.reload(), 1500);
-                    } else throw new Error();
-                } catch (e) {
-                    ui.toast("Kode Pairing Tidak Valid", "error");
-                }
-            },
-            pasteCode: async () => {
-                try {
-                    const text = await navigator.clipboard.readText();
-                    document.getElementById('login-code').value = text;
-                } catch(e) { ui.toast("Izin paste ditolak", "error"); }
-            }
-        };
-
-        // --- SIDEBAR SYSTEM (GEMINI STYLE) ---
-        const sidebarSys = {
-            el: null,
-            isPinned: false,
-            init: () => {
-                sidebarSys.el = document.getElementById('sidebar');
-                sidebarSys.isPinned = db.settings.pinnedSidebar;
-                sidebarSys.applyState();
-            },
-            togglePin: () => {
-                sidebarSys.isPinned = !sidebarSys.isPinned;
-                db.settings.pinnedSidebar = sidebarSys.isPinned;
-                utils.save();
-                sidebarSys.applyState();
-                
-                // Animation feedback
-                const icon = document.getElementById('pin-icon');
-                icon.classList.add('scale-125', 'text-primary');
-                setTimeout(() => icon.classList.remove('scale-125', 'text-primary'), 200);
-            },
-            applyState: () => {
-                const icon = document.getElementById('pin-icon');
-                if (sidebarSys.isPinned) {
-                    sidebarSys.el.classList.remove('collapsed');
-                    sidebarSys.el.classList.add('pinned');
-                    document.body.classList.remove('sidebar-collapsed');
-                    document.body.classList.add('sidebar-pinned');
-                    icon.classList.remove('rotate-45', 'text-textMuted');
-                    icon.classList.add('text-primary'); // Highlight when pinned
-                } else {
-                    sidebarSys.el.classList.add('collapsed');
-                    sidebarSys.el.classList.remove('pinned');
-                    document.body.classList.add('sidebar-collapsed');
-                    document.body.classList.remove('sidebar-pinned');
-                    icon.classList.add('rotate-45', 'text-textMuted');
-                    icon.classList.remove('text-primary');
-                }
-            }
-        };
-
-        // --- UI & ROUTING ---
-        const router = {
-            navigate: (page) => {
-                document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
-                document.getElementById(`view-${page}`).classList.remove('hidden');
-                document.getElementById('page-title').innerText = page.charAt(0).toUpperCase() + page.slice(1);
-                
-                // Active States
-                document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('bg-white/5', el.dataset.page === page));
-                document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
-                
-                if (page === 'settings') handlers.generatePairingCode();
-                if (page === 'dashboard') app.renderCharts();
-            }
-        };
-
-        const ui = {
-            openModal: (id) => {
-                const m = document.getElementById(id);
-                m.classList.remove('opacity-0', 'pointer-events-none');
-                const content = m.querySelector('.transform');
-                content.classList.remove('translate-y-full', 'scale-95');
-            },
-            closeModal: (id) => {
-                const m = document.getElementById(id);
-                m.classList.add('opacity-0', 'pointer-events-none');
-                const content = m.querySelector('.transform');
-                content.classList.add(id.includes('mobile') || id.includes('trx') ? 'translate-y-full' : 'scale-95');
-            },
-            toast: (msg, type='success') => {
-                const c = document.getElementById('toast-container');
-                const el = document.createElement('div');
-                el.className = `px-4 py-3 rounded-xl bg-surface2 border ${type==='error'?'border-danger text-danger':'border-success text-success'} shadow-xl text-xs font-bold flex items-center gap-2 animate-slide-up pointer-events-auto`;
-                el.innerHTML = `<i class="fa-solid ${type==='error'?'fa-circle-xmark':'fa-circle-check'}"></i> ${msg}`;
-                c.appendChild(el);
-                setTimeout(() => el.remove(), 3000);
-            }
-        };
-
-        // --- HANDLERS ---
-        const handlers = {
-            addTrx: (e) => {
-                e.preventDefault();
-                const fd = new FormData(e.target);
-                const amt = utils.parseIDR(fd.get('amount'));
-                if (!amt) return ui.toast("Nominal tidak valid", "error");
-                
-                db.transactions.unshift({
-                    id: utils.genId(),
-                    date: new Date().toISOString(),
-                    type: fd.get('type'),
-                    desc: fd.get('desc'),
-                    amount: amt
-                });
-                
-                utils.save();
-                ui.closeModal('modal-add-trx');
-                ui.toast("Transaksi tersimpan");
-                e.target.reset();
-                if (fd.get('type') === 'income') confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                app.refresh();
-            },
-            addCard: (e) => {
-                e.preventDefault();
-                const fd = new FormData(e.target);
-                db.cards.push({
-                    id: utils.genId(),
-                    bank: fd.get('bank'),
-                    holder: fd.get('holder'),
-                    number: fd.get('number'),
-                    balance: utils.parseIDR(fd.get('balance'))
-                });
-                utils.save();
-                ui.closeModal('modal-add-card');
-                ui.toast("Kartu ditambahkan");
-                app.refresh();
-            },
-            saveBudget: () => {
-                const val = document.getElementById('budget-input').value;
-                db.budget = utils.parseIDR(val);
-                utils.save();
-                ui.toast("Budget disimpan");
-                app.refresh();
-            },
-            updatePhoto: (input) => {
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        db.profile.photo = e.target.result;
-                        utils.save();
-                        app.refresh();
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
-            },
-            saveProfile: () => {
-                db.profile.name = document.getElementById('settings-name').value;
-                utils.save();
-                ui.toast("Profil diperbarui");
-                app.refresh();
-            },
-            generatePairingCode: () => {
-                // Generate base64 string of DB
-                const code = btoa(JSON.stringify(db));
-                document.getElementById('pairing-code-display').value = code;
-                
-                // Generate QR
-                const qrContainer = document.getElementById('qrcode');
-                qrContainer.innerHTML = '';
-                new QRCode(qrContainer, {
-                    text: code,
-                    width: 128,
-                    height: 128,
-                    colorDark : "#ffffff",
-                    colorLight : "#000000",
-                    correctLevel : QRCode.CorrectLevel.L
-                });
-            },
-            copyPairingCode: () => {
-                const el = document.getElementById('pairing-code-display');
-                el.select();
-                document.execCommand('copy');
-                ui.toast("Kode Pairing disalin ke clipboard!");
-            },
-            logout: () => {
-                if(confirm("Hapus data dari perangkat ini? (Pastikan sudah pairing ke perangkat lain jika ingin data selamat)")) {
-                    localStorage.removeItem(DB_KEY);
-                    location.reload();
-                }
-            },
-            syncNow: () => {
-                // Manual trigger to reload from storage if something blocked event
-                utils.load();
-                app.refresh();
-                ui.toast("Data Disinkronkan");
-                document.getElementById('sync-icon').classList.add('fa-spin');
-                setTimeout(() => document.getElementById('sync-icon').classList.remove('fa-spin'), 1000);
-            }
-        };
-
-        const filters = {
-            current: 'all',
-            set: (type) => {
-                filters.current = type;
-                document.querySelectorAll('.filter-btn').forEach(b => {
-                    const isActive = b.onclick.toString().includes(type);
-                    b.className = `filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-all ${isActive ? 'bg-primary text-white' : 'text-textMuted hover:bg-surface2'}`;
-                });
-                app.renderTrx();
-            }
-        };
-
-        // --- APP RENDER LOGIC ---
-        const app = {
-            chart: null,
-            init: () => {
-                sidebarSys.init();
-                app.refresh();
-                document.getElementById('current-date').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-                
-                // Attach Input Formatters
-                document.querySelectorAll('.currency-input').forEach(el => {
-                    el.addEventListener('input', (e) => {
-                        let val = e.target.value.replace(/[^0-9]/g, '');
-                        if (val) e.target.value = utils.formatIDR(val).replace('Rp', '').trim();
-                    });
-                });
-            },
-            refresh: () => {
-                // Profile
-                const els = ['header-avatar', 'sidebar-avatar', 'settings-avatar'];
-                els.forEach(id => {
-                    const el = document.getElementById(id);
-                    if(db.profile.photo) {
-                        el.innerHTML = `<img src="${db.profile.photo}" class="w-full h-full object-cover">`;
-                        if(id === 'settings-avatar') el.innerHTML += `<input type="file" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handlers.updatePhoto(this)">`;
+                    activeCount++;
+                    if (task.date === today) {
+                        listToday.appendChild(el);
+                        totalTodayTask++;
+                    } else if (task.date === tomorrow) {
+                        listTomorrow.appendChild(el);
                     } else {
-                        el.innerHTML = `<span>${db.profile.name.charAt(0)}</span>`;
-                        if(id === 'settings-avatar') el.innerHTML += `<input type="file" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handlers.updatePhoto(this)">`;
+                        listUpcoming.appendChild(el);
                     }
-                });
-                document.getElementById('settings-name').value = db.profile.name;
-                document.getElementById('sidebar-name').innerText = db.profile.name;
-
-                // Stats
-                const income = db.transactions.filter(t => t.type === 'income').reduce((a,b) => a+b.amount, 0);
-                const expense = db.transactions.filter(t => t.type === 'expense').reduce((a,b) => a+b.amount, 0);
-                const cardBal = db.cards.reduce((a,b) => a+b.balance, 0);
-                
-                document.getElementById('dash-income').innerText = utils.formatIDR(income);
-                document.getElementById('dash-expense').innerText = utils.formatIDR(expense);
-                document.getElementById('dash-networth').innerText = utils.formatIDR((income - expense) + cardBal);
-
-                // Budget
-                const spent = expense; // Simplified for demo
-                const percent = db.budget > 0 ? (spent / db.budget) * 100 : 0;
-                document.getElementById('budget-input').value = db.budget ? utils.formatIDR(db.budget).replace('Rp','').trim() : '';
-                document.getElementById('budget-spent').innerText = utils.formatIDR(spent);
-                const bar = document.getElementById('budget-bar');
-                bar.style.width = Math.min(percent, 100) + '%';
-                bar.className = `h-full transition-all duration-500 ${percent > 100 ? 'bg-danger' : percent > 80 ? 'bg-warning' : 'bg-primary'}`;
-                document.getElementById('budget-alert').classList.toggle('hidden', percent <= 100);
-
-                // Lists
-                app.renderTrx();
-                app.renderCards();
-                app.renderCharts();
-            },
-            renderTrx: () => {
-                const list = document.getElementById('trx-list');
-                const recent = document.getElementById('recent-list');
-                list.innerHTML = ''; recent.innerHTML = '';
-                
-                const filtered = db.transactions.filter(t => filters.current === 'all' || t.type === filters.current);
-                
-                filtered.forEach(t => {
-                    const isInc = t.type === 'income';
-                    const html = `
-                        <div class="flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full ${isInc ? 'bg-success/10 text-success' : 'bg-white/5 text-white'} flex items-center justify-center">
-                                    <i class="fa-solid ${isInc ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-white text-sm">${t.desc}</h4>
-                                    <p class="text-[10px] text-textMuted">${utils.dateStr(t.date)}</p>
-                                </div>
-                            </div>
-                            <span class="font-bold text-sm ${isInc ? 'text-success' : 'text-danger'}">${isInc ? '+' : '-'} ${utils.formatIDR(t.amount)}</span>
-                        </div>
-                    `;
-                    list.innerHTML += html;
-                });
-                
-                db.transactions.slice(0,5).forEach(t => {
-                    recent.innerHTML += `
-                        <div class="flex items-center justify-between p-2 rounded-lg bg-surface2/50">
-                            <span class="text-xs text-textMuted truncate w-24">${t.desc}</span>
-                            <span class="text-xs font-bold ${t.type==='income'?'text-success':'text-danger'}">${utils.formatIDR(t.amount)}</span>
-                        </div>
-                    `;
-                });
-            },
-            renderCards: () => {
-                const grid = document.getElementById('card-grid');
-                grid.innerHTML = '';
-                db.cards.forEach(c => {
-                    const bgClass = `bg-${c.bank}`;
-                    grid.innerHTML += `
-                        <div class="atm-card ${bgClass} p-6 relative group" data-tilt>
-                            <div class="atm-card-bg opacity-50"></div>
-                            <div class="relative z-10 flex flex-col h-full justify-between">
-                                <div class="flex justify-between items-start">
-                                    <div class="w-12 h-8 bg-yellow-500/80 rounded-md"></div> <!-- Chip -->
-                                    <span class="font-bold italic opacity-80">${c.bank.toUpperCase()}</span>
-                                </div>
-                                <div class="text-xl font-mono tracking-widest my-4 break-all">${c.number}</div>
-                                <div class="flex justify-between items-end">
-                                    <div>
-                                        <p class="text-[8px] uppercase opacity-70">Card Holder</p>
-                                        <p class="font-bold text-sm tracking-widest uppercase">${c.holder}</p>
-                                    </div>
-                                    <p class="font-bold font-mono">${utils.formatIDR(c.balance)}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                if(window.VanillaTilt) VanillaTilt.init(document.querySelectorAll('.atm-card'));
-            },
-            renderCharts: () => {
-                const ctx = document.getElementById('mainChart');
-                if(!ctx) return;
-                if(app.chart) app.chart.destroy();
-                
-                // Simple 7 day mock data based on existing transactions (in real app would group by date)
-                const data = [0,0,0,0,0,0,0]; 
-                const labels = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
-                
-                // Populate last slot with current total for visual
-                data[6] = db.transactions.filter(t=>t.type==='expense').reduce((a,b)=>a+b.amount,0);
-
-                app.chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Pengeluaran',
-                            data: data,
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: {display:false} },
-                        scales: { x: { display: false }, y: { display: false } }
-                    }
-                });
-            }
-        };
-
-        // --- REAL-TIME TAB SYNC ---
-        window.addEventListener('storage', (e) => {
-            if (e.key === DB_KEY) {
-                utils.load();
-                app.refresh();
-                if(sidebarSys.el) { // If sidebar exists (we are logged in)
-                     // Sync sidebar state if it changed in another tab
-                     sidebarSys.isPinned = db.settings.pinnedSidebar;
-                     sidebarSys.applyState();
                 }
-                ui.toast("Data disinkronkan dari tab lain");
-            }
-        });
+            });
 
-        window.onload = authSys.init;
-    </script>
+            // Empty States
+            if (!listToday.innerHTML) listToday.innerHTML = this.getEmptyState('Tidak ada tugas hari ini');
+            if (!listTomorrow.innerHTML) listTomorrow.innerHTML = this.getEmptyState('Besok kosong');
+            if (!listUpcoming.innerHTML) listUpcoming.innerHTML = this.getEmptyState('Belum ada rencana');
+            if (!listHistory.innerHTML) listHistory.innerHTML = this.getEmptyState('Belum ada riwayat');
+
+            document.getElementById('history-count').innerText = `${this.tasks.filter(t => t.completed).length} Selesai`;
+            
+            // Update Ring
+            this.updateProgressRing(completedTodayCount, totalTodayTask);
+
+            // Re-init icons for new elements
+            lucide.createIcons();
+        }
+
+        createTaskElement(task) {
+            const li = document.createElement('li');
+            li.className = `task-item animate-item ${task.completed ? 'completed' : ''}`;
+            
+            // Date formatting helper
+            const d = new Date(task.date);
+            const dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+
+            li.innerHTML = `
+                <div class="checkbox-wrapper" onclick="app.toggleComplete(${task.id})">
+                    ${task.completed ? '<i data-lucide="check" width="14" color="white"></i>' : ''}
+                </div>
+                <div class="task-content" onclick="app.toggleComplete(${task.id})">
+                    <div class="task-title">${task.title}</div>
+                    <div class="task-meta">
+                        <i data-lucide="calendar" width="10"></i> ${dateStr}
+                    </div>
+                </div>
+                <div style="padding: 10px; opacity: 0.5;" onclick="app.deleteTask(${task.id})">
+                    <i data-lucide="trash-2" width="16" color="#FF3B30"></i>
+                </div>
+            `;
+            
+            // Simple Swipe Logic (Visual implementation via JS is complex in one file, 
+            // relying on click actions above for stability, but adding touch listener structure)
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            li.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+            
+            li.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                this.handleSwipe(task.id, touchStartX, touchEndX);
+            }, {passive: true});
+
+            return li;
+        }
+
+        handleSwipe(id, start, end) {
+            if (start - end > 100) { // Swipe Left (Delete)
+                if(confirm('Hapus tugas ini?')) this.deleteTask(id);
+            }
+            if (end - start > 100) { // Swipe Right (Complete)
+                this.toggleComplete(id);
+            }
+        }
+
+        getEmptyState(msg) {
+            return `<div class="empty-state"><i data-lucide="coffee" width="32"></i><p>${msg}</p></div>`;
+        }
+
+        updateProgressRing(completed, total) {
+            const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+            const ring = document.getElementById('progressRing');
+            document.getElementById('progressText').innerText = `${percent}%`;
+            ring.style.background = `conic-gradient(var(--accent-green) ${percent}%, var(--card-bg) 0%)`;
+        }
+
+        // --- UI UTILS ---
+
+        openModal() {
+            this.vibrate();
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('addTaskSheet').classList.add('active');
+            document.getElementById('taskInput').focus();
+        }
+
+        closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.getElementById('addTaskSheet').classList.remove('active');
+            // Reset inputs
+            document.getElementById('taskInput').value = '';
+            document.getElementById('batchInput').value = '';
+        }
+
+        toggleBatchMode() {
+            this.isBatchMode = !this.isBatchMode;
+            document.getElementById('batchToggle').classList.toggle('active');
+            
+            if (this.isBatchMode) {
+                document.getElementById('singleInputMode').style.display = 'none';
+                document.getElementById('batchInputMode').style.display = 'block';
+                document.getElementById('batchInput').focus();
+            } else {
+                document.getElementById('singleInputMode').style.display = 'block';
+                document.getElementById('batchInputMode').style.display = 'none';
+                document.getElementById('taskInput').focus();
+            }
+        }
+
+        setDateQuick(type) {
+            const d = new Date();
+            if (type === 'tomorrow') d.setDate(d.getDate() + 1);
+            document.getElementById('dateInput').valueAsDate = d;
+        }
+
+        switchTab(tabName, el) {
+            this.vibrate();
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+
+            if (tabName === 'tasks') {
+                document.getElementById('active-view').style.display = 'block';
+                document.getElementById('history-view').style.display = 'none';
+            } else {
+                document.getElementById('active-view').style.display = 'none';
+                document.getElementById('history-view').style.display = 'block';
+            }
+        }
+
+        showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // --- NOTIFICATIONS ---
+        scheduleNotification(task) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                // Simulate a notification showing up in system tray logic
+                // In real PWA this needs Service Worker for background push
+                // This works if app is suspended in background on some OS
+                // or actively open.
+                
+                // For demo purposes, we show immediately or check logic
+                console.log("Notifikasi dijadwalkan untuk: " + task.title);
+            }
+        }
+
+        checkReminders() {
+            // Check if any active task is due today and notify if not done
+            // Simple logic for demo
+            const now = new Date();
+            if (now.getHours() === 9 && now.getMinutes() === 0) { // Daily briefing at 9 AM
+                const count = this.tasks.filter(t => !t.completed && t.date === now.toISOString().split('T')[0]).length;
+                if (count > 0 && Notification.permission === "granted") {
+                    new Notification("AmoledTask Pro", {
+                        body: `Kamu punya ${count} tugas yang harus diselesaikan hari ini!`,
+                        icon: "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle.svg"
+                    });
+                }
+            }
+        }
+    }
+
+    // Initialize App
+    const app = new TaskApp();
+
+</script>
+
 </body>
 </html>
